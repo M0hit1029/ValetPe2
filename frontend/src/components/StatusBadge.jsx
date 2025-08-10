@@ -9,7 +9,7 @@ export default function StatusBadge({ status }) {
         icon: '✅'
       };
     }
-    if (statusLower.includes('unfulfilled') || statusLower === '' || statusLower === 'null') {
+    if (statusLower.includes('unfulfilled') || statusLower === '' || statusLower === 'null' || !status) {
       return {
         color: '#ef4444',
         background: 'rgba(239, 68, 68, 0.1)',
