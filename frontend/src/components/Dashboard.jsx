@@ -25,8 +25,28 @@ function Dashboard() {
   const filteredOrders = orders.filter(order => {
     const matchesSearch = order.orderid.toString().includes(searchTerm) ||
                          order.shop.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || 
-                         order.status.toLowerCase().includes(statusFilter.toLowerCase());
+    
+    let matchesStatus = true;
+    if (statusFilter !== 'all') {
+      const orderStatus = (order.status || '').toLowerCase();
+      switch (statusFilter) {
+        case 'fulfilled':
+          matchesStatus = orderStatus.includes('fulfilled');
+          break;
+        case 'unfulfilled':
+          matchesStatus = orderStatus.includes('unfulfilled') || orderStatus === '' || orderStatus === 'null';
+          break;
+        case 'pending':
+          matchesStatus = orderStatus.includes('pending') || orderStatus.includes('processing');
+          break;
+        case 'cancelled':
+          matchesStatus = orderStatus.includes('cancelled') || orderStatus.includes('canceled');
+          break;
+        default:
+          matchesStatus = true;
+      }
+    }
+    
     return matchesSearch && matchesStatus;
   });
 

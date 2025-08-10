@@ -9,6 +9,13 @@ export default function StatusBadge({ status }) {
         icon: '✅'
       };
     }
+    if (statusLower.includes('unfulfilled') || statusLower === '' || statusLower === 'null') {
+      return {
+        color: '#ef4444',
+        background: 'rgba(239, 68, 68, 0.1)',
+        icon: '❌'
+      };
+    }
     if (statusLower.includes('pending') || statusLower.includes('processing')) {
       return {
         color: '#f59e0b',
@@ -20,7 +27,7 @@ export default function StatusBadge({ status }) {
       return {
         color: '#ef4444',
         background: 'rgba(239, 68, 68, 0.1)',
-        icon: '❌'
+        icon: '🚫'
       };
     }
     if (statusLower.includes('partial')) {
@@ -30,11 +37,11 @@ export default function StatusBadge({ status }) {
         icon: '📦'
       };
     }
-    // Default for unfulfilled or unknown
+    // Default for unknown status
     return {
       color: '#6b7280',
       background: 'rgba(107, 114, 128, 0.1)',
-      icon: '📋'
+      icon: '❓'
     };
   };
 
