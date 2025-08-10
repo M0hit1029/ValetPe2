@@ -5,14 +5,12 @@ import Dashboard from './components/Dashboard';
 export default function App() {
   return (
     <div>
-      <nav>
+      <nav style={{ marginBottom: 24 }}>
         <Link to="/">Home</Link> |{" "}
         <Link to="/login">Login</Link> |{" "}
-        <Link to="/orders">Orders</Link>
+        <Link to="/dashboard">Dashboard</Link>
       </nav>
-
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>

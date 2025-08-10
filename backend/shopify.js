@@ -56,19 +56,16 @@ export async function fetchOrdersAndSave(shop, accessToken) {
     const orderIdNum = parseInt(order.id.split('/').pop());
     const createdAtDate = new Date(order.createdAt);
 
-    // Insert order
     await pool.query(
       `INSERT INTO orders (shop, orderid, status, createdat) VALUES ($1, $2, $3, $4)
        ON CONFLICT (orderid) DO NOTHING`,
       [shop, orderIdNum, order.displayFulfillmentStatus || 'unfulfilled', createdAtDate]
     );
 
-    // Insert each line item and image
     for (const lineItemEdge of order.lineItems.edges) {
       const lineItem = lineItemEdge.node;
       const lineItemIdNum = parseInt(lineItem.id.split('/').pop());
 
-      // Insert fulfilment item
       await pool.query(
         `INSERT INTO fulfilment_items (lineitemid, qty, reason, imageurl) VALUES ($1, $2, $3, $4)
          ON CONFLICT (lineitemid) DO NOTHING`,
@@ -76,7 +73,6 @@ export async function fetchOrdersAndSave(shop, accessToken) {
       );
 
       if (lineItem.image && lineItem.image.originalSrc) {
-        // Get returnId for this line item to link images
         const res = await pool.query(
           `SELECT returnid FROM fulfilment_items WHERE lineitemid = $1`,
           [lineItemIdNum]
@@ -84,7 +80,6 @@ export async function fetchOrdersAndSave(shop, accessToken) {
 
         if (res.rows.length > 0) {
           const returnId = res.rows[0].returnid;
-          // Insert image
           await pool.query(
             `INSERT INTO images (imageurl, returnitemid) VALUES ($1, $2)
              ON CONFLICT (imageurl) DO NOTHING`,

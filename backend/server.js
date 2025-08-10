@@ -1,7 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import dotenv from 'dotenv';
-import cors from 'cors';          // <--- import cors here
+import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import ordersRoutes from './routes/orders.js';
 
@@ -11,11 +11,9 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
-
-// Add CORS middleware before your routes
 app.use(cors({
-  origin: 'http://localhost:5173',  // frontend URL (change if different)
-  credentials: true                 // allow cookies/sessions to be sent
+  origin: 'http://localhost:5173',  // Change if using a different frontend URL
+  credentials: true
 }));
 
 app.use(session({
@@ -23,13 +21,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    secure: false,  // set true if using HTTPS (ngrok/production)
+    secure: false,  // Set true if using HTTPS
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'lax'
   }
 }));
 
-// Routes
 app.use('/auth', authRoutes);
 app.use('/orders', ordersRoutes);
 

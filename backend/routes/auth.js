@@ -12,8 +12,6 @@ router.get('/', (req, res) => {
 
   const redirectUri = `${process.env.HOST}/auth/callback`;
   const installUrl = `https://${shop}/admin/oauth/authorize?client_id=${process.env.SHOPIFY_API_KEY}&scope=read_orders&state=${state}&redirect_uri=${redirectUri}`;
-console.log('Redirecting to:', installUrl);
-
   res.redirect(installUrl);
 });
 
@@ -25,10 +23,8 @@ router.get('/callback', async (req, res) => {
     const accessToken = await exchangeAccessToken(shop, code);
     req.session.shop = shop;
     req.session.accessToken = accessToken;
-
     await fetchOrdersAndSave(shop, accessToken);
-
-    res.redirect('/dashboard');
+    res.redirect('http://localhost:5173/dashboard');
   } catch (err) {
     console.error(err);
     res.status(500).send('OAuth failed');

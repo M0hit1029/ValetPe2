@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT * FROM orders WHERE shop = $1 ORDER BY created_at DESC LIMIT 100`,
+      `SELECT * FROM orders WHERE shop = $1 ORDER BY createdat DESC LIMIT 100`,
       [shop]
     );
     res.json(result.rows);
