@@ -21,21 +21,6 @@ Backend is Node.js + Express (JavaScript) and PostgreSQL. The app uses Shopify A
 
 ---
 
-## 📁 Repository structure
-├── backend/ # Express app (main)
-│ ├── controllers/
-│ ├── routes/
-│ ├── services/ # Shopify API service, sync jobs
-│ └── index.js
-├── frontend/ # Basic React frontend (optional)
-├── migrations/ # DB migrations / schema SQL
-├── .env.example
-├── .gitignore
-└── README.md
-
-
----
-
 ## 🧰 Tech stack
 - Node.js (Express)
 - PostgreSQL
@@ -49,17 +34,27 @@ Backend is Node.js + Express (JavaScript) and PostgreSQL. The app uses Shopify A
 Run the SQL in `migrations/` or use your favourite migration tool.
 
 ```sql
--- orders table
 CREATE TABLE IF NOT EXISTS orders (
   id SERIAL PRIMARY KEY,
   shop VARCHAR(255) NOT NULL,
-  orderId VARCHAR(100) NOT NULL,
+  orderid BIGINT UNIQUE NOT NULL,
   status VARCHAR(50),
-  total_amount NUMERIC,
-  createdAt TIMESTAMP NOT NULL,
-  raw_payload JSONB,          -- optional: store GraphQL/REST payload
-  UNIQUE (shop, orderId)
+  createdat TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS fulfilment_items (
+  returnid SERIAL PRIMARY KEY,
+  lineitemid BIGINT UNIQUE NOT NULL,
+  qty INTEGER NOT NULL,
+  reason TEXT,
+  imageurl TEXT
+);
+
+CREATE TABLE IF NOT EXISTS images (
+  imageurl TEXT PRIMARY KEY,
+  returnitemid INTEGER REFERENCES fulfilment_items(returnid) ON DELETE CASCADE
+);
+
 
 
 
